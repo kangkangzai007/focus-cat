@@ -321,6 +321,50 @@
             line-height: 1.8;
         }
 
+        /* 分享区域 */
+        .share-section {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 3rem;
+            text-align: center;
+            animation: fadeIn 1.4s ease-out;
+        }
+
+        .share-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .qrcode-container {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        .qrcode-container img {
+            width: 200px;
+            height: 200px;
+            border: 3px solid white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .share-tips {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            max-width: 500px;
+            line-height: 1.8;
+        }
+
+        .share-tips strong {
+            color: var(--primary-blue);
+        }
+
         /* CTA区域 */
         .cta-section {
             background: var(--primary-gradient);
@@ -510,6 +554,21 @@
             </div>
         </section>
 
+        <!-- 分享区域 -->
+        <section class="share-section">
+            <h2 class="section-title">📱 扫码分享给好友</h2>
+            <div class="share-content">
+                <div class="qrcode-container">
+                    <img id="qrcodeImg" src="" alt="扫码查看商品详情">
+                </div>
+                <p class="share-tips">
+                    <strong>🎁 分享给好友</strong><br>
+                    扫描二维码即可查看专注喵商品详情<br>
+                    一起开启高效学习之旅！
+                </p>
+            </div>
+        </section>
+
         <!-- CTA区域 -->
         <section class="cta-section">
             <h2 class="cta-title">给自己一个机会</h2>
@@ -524,6 +583,27 @@
     </footer>
 
     <script>
+        // 配置你的网站地址
+        // 本地测试时会使用当前页面URL
+        // 部署到GitHub Pages后，替换为你的实际网址
+        const SITE_URL = ''; // 例如：'https://你的用户名.github.io/focus-cat/product-detail.html'
+
+        // 初始化二维码
+        function initQRCode() {
+            const pageUrl = SITE_URL || window.location.href;
+            const qrcodeImg = document.getElementById('qrcodeImg');
+
+            // 使用免费的二维码API生成二维码
+            // 如果这个API不可用，可以换用其他服务，如：
+            // - https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=
+            // - https://api.qrserver.com/v1/create-qr-code/
+            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(pageUrl)}`;
+            qrcodeImg.src = qrApiUrl;
+        }
+
+        // 页面加载时初始化
+        window.addEventListener('load', initQRCode);
+
         function handlePurchase() {
             // 这里配置实际的购买链接
             alert('感谢您的关注！\n\n商品即将上架，请添加客服微信获取首发优惠：\n微信号：hthx_2014 \n\n或关注我们的公众号"专注喵"了解更多信息。');
