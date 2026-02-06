@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>专注喵全球排行榜 | Focus Cat Global Leaderboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --primary-blue: #667eea;
+            --primary-purple: #764ba2;
+            --gold: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            --silver: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
+            --bronze: linear-gradient(135deg, #cd7f32 0%, #e9967a 100%);
+            --bg-primary: #ffffff;
+            --bg-secondary: #f7fafc;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --border-color: #e2e8f0;
+            --success-green: #48bb78;
+            --warning-red: #f56565;
+        }
+
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif;
+            background: linear-gradient(180deg, #f0f4ff 0%, #fef5ff 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 背景装饰 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background-image:
+                radial-gradient(circle at 20% 30%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(118, 75, 162, 0.1) 0%, transparent 50%);
+            animation: float 20s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            50% { transform: translate(50px, 50px) rotate(5deg); }
+        }
+
+        /* 喵爪装饰 */
+        .paw-decoration {
+            position: fixed;
+            opacity: 0.05;
+            font-size: 100px;
+            z-index: -1;
+            animation: paw-float 15s ease-in-out infinite;
+        }
+
+        .paw-1 { top: 10%; left: 5%; animation-delay: 0s; }
+        .paw-2 { top: 60%; right: 10%; animation-delay: 5s; }
+        .paw-3 { bottom: 20%; left: 15%; animation-delay: 10s; }
+
+        @keyframes paw-float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-30px) rotate(10deg); }
+        }
+
+        /* 头部导航 */
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-icon {
+            height: 50px;
+            width: auto;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-blue);
+        }
+
+        .lang-switcher {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .lang-switcher:hover {
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        .purchase-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .purchase-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* 主容器 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* 数据概览区 */
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stats-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stats-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--primary-gradient);
+        }
+
+        .stats-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .stats-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stats-title {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-value {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-trend {
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .stats-trend.up {
+            color: var(--success-green);
+        }
+
+        /* 排行榜区域 */
+        .leaderboard-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 3rem;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .leaderboard-header {
+            margin-bottom: 2rem;
+        }
+
+        .leaderboard-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 筛选器 */
+        .filters {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1.25rem;
+            border: 2px solid var(--border-color);
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: transparent;
+        }
+
+        .country-select {
+            padding: 0.5rem 1.25rem;
+            border: 2px solid var(--border-color);
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .country-select:hover {
+            border-color: var(--primary-blue);
+        }
+
+        /* 奖牌区（前三名） */
+        .podium {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 1rem;
+            margin: 3rem 0;
+            padding: 2rem 0;
+        }
+
+        .podium-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .podium-item:hover {
+            transform: translateY(-10px);
+        }
+
+        .podium-first {
+            order: 2;
+            z-index: 3;
+        }
+
+        .podium-second {
+            order: 1;
+            z-index: 2;
+        }
+
+        .podium-third {
+            order: 3;
+            z-index: 1;
+        }
+
+        .podium-card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+            min-width: 180px;
+        }
+
+        .podium-first .podium-card {
+            border: 3px solid;
+            border-image: var(--gold) 1;
+            min-width: 220px;
+        }
+
+        .podium-second .podium-card {
+            border: 3px solid;
+            border-image: var(--silver) 1;
+        }
+
+        .podium-third .podium-card {
+            border: 3px solid;
+            border-image: var(--bronze) 1;
+        }
+
+        .medal {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        .podium-first .medal {
+            animation-delay: 0s;
+        }
+
+        .podium-second .medal {
+            animation-delay: 0.2s;
+        }
+
+        .podium-third .medal {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .podium-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            border: 3px solid var(--border-color);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+        }
+
+        .podium-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .podium-first .podium-avatar {
+            width: 100px;
+            height: 100px;
+            border-color: #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .podium-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .podium-country {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .podium-score {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 排行榜表格 */
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 2rem;
+        }
+
+        .leaderboard-table thead {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+        }
+
+        .leaderboard-table th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .leaderboard-table th:first-child {
+            border-radius: 10px 0 0 10px;
+        }
+
+        .leaderboard-table th:last-child {
+            border-radius: 0 10px 10px 0;
+        }
+
+        .leaderboard-table tbody tr {
+            border-bottom: 1px solid var(--border-color);
+            transition: all 0.3s;
+        }
+
+        .leaderboard-table tbody tr:hover {
+            background: var(--bg-secondary);
+            transform: scale(1.01);
+        }
+
+        .leaderboard-table tbody tr.top-ten {
+            background: linear-gradient(90deg, rgba(102, 126, 234, 0.05) 0%, transparent 100%);
+        }
+
+        .leaderboard-table tbody tr.current-user {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid #ffd700;
+        }
+
+        .leaderboard-table td {
+            padding: 1rem;
+        }
+
+        .rank-cell {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary-blue);
+            width: 80px;
+        }
+
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid var(--border-color);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: white;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .user-name {
+            font-weight: 600;
+        }
+
+        .country-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .flag {
+            font-size: 1.5rem;
+        }
+
+        .score-cell {
+            font-weight: 700;
+            font-size: 1.1rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .trend-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-weight: 600;
+        }
+
+        .trend-up {
+            color: var(--success-green);
+        }
+
+        .trend-down {
+            color: var(--warning-red);
+        }
+
+        /* CTA 区域 */
+        .cta-section {
+            background: var(--primary-gradient);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 3rem;
+            animation: slideUp 1s ease-out;
+        }
+
+        .cta-section::before {
+            content: '🐾';
+            position: absolute;
+            font-size: 150px;
+            opacity: 0.1;
+            top: -30px;
+            right: -30px;
+            transform: rotate(-15deg);
+        }
+
+        .cta-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .cta-subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-features {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .cta-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .cta-btn {
+            padding: 1rem 3rem;
+            background: white;
+            color: var(--primary-purple);
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 底部 */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            background: white;
+            margin-top: 3rem;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-menu {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .stats-overview {
+                grid-template-columns: 1fr;
+            }
+
+            .podium {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .podium-first,
+            .podium-second,
+            .podium-third {
+                order: initial;
+            }
+
+            .leaderboard-table {
+                font-size: 0.9rem;
+            }
+
+            .leaderboard-table th,
+            .leaderboard-table td {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .user-cell {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .cta-features {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* 加载动画 */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 喵爪装饰 -->
+    <div class="paw-decoration paw-1">🐾</div>
+    <div class="paw-decoration paw-2">🐾</div>
+    <div class="paw-decoration paw-3">🐾</div>
+
+    <!-- 头部导航 -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="logo.png" alt="专注喵Logo" class="logo-icon">
+                <span data-i18n="brandName">专注喵</span>
+            </div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-link" data-i18n="nav.home">首页</a>
+                <a href="#" class="nav-link" data-i18n="nav.leaderboard">排行榜</a>
+                <a href="#" class="nav-link" data-i18n="nav.myFocus">我的专注</a>
+                <select class="lang-switcher" id="langSwitcher">
+                    <option value="zh-CN">🌐 中文</option>
+                    <option value="en-US">🌐 English</option>
+                    <option value="ja-JP">🌐 日本語</option>
+                </select>
+                <button class="purchase-btn" id="headerPurchaseBtn" data-i18n="nav.purchase">
+                    🛒 购买专注喵
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 主容器 -->
+    <div class="container">
+        <!-- 数据概览区 -->
+        <section class="stats-overview">
+            <div class="stats-card">
+                <div class="stats-icon">👥</div>
+                <div class="stats-title" data-i18n="stats.globalUsers">全球用户</div>
+                <div class="stats-value" id="totalUsers">0</div>
+                <div class="stats-trend up">
+                    ↑ <span data-i18n="stats.todayNew">今日新增</span>: <span id="newUsersToday">0</span>
+                </div>
+            </div>
+            <div class="stats-card">
+                <div class="stats-icon">⏱️</div>
+                <div class="stats-title" data-i18n="stats.todayFocus">今日专注总时长</div>
+                <div class="stats-value"><span id="totalFocusHours">0</span> <span data-i18n="stats.hours">小时</span></div>
+                <div class="stats-trend up">
+                    ↑ <span id="focusGrowth">0</span>% <span data-i18n="stats.vsYesterday">对比昨日</span>
+                </div>
+            </div>
+            <div class="stats-card">
+                <div class="stats-icon">💎</div>
+                <div class="stats-title" data-i18n="stats.todayPoints">今日积分产出</div>
+                <div class="stats-value" id="totalPoints">0</div>
+                <div class="stats-trend up">
+                    ↑ <span id="pointsGrowth">0</span>% <span data-i18n="stats.vsYesterday">对比昨日</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 排行榜区域 -->
+        <section class="leaderboard-section">
+            <div class="leaderboard-header">
+                <h2 class="leaderboard-title" data-i18n="leaderboard.title">🏆 全球排行榜</h2>
+
+                <!-- 筛选器 -->
+                <div class="filters">
+                    <div class="filter-group">
+                        <button class="filter-btn active" data-period="all" data-i18n="leaderboard.allTime">全球总榜</button>
+                        <button class="filter-btn" data-period="today" data-i18n="leaderboard.today">今日</button>
+                        <button class="filter-btn" data-period="week" data-i18n="leaderboard.thisWeek">本周</button>
+                        <button class="filter-btn" data-period="month" data-i18n="leaderboard.thisMonth">本月</button>
+                    </div>
+                    <select class="country-select" id="countryFilter">
+                        <option value="all" data-i18n="leaderboard.allCountries">🌍 全球</option>
+                        <option value="CN">🇨🇳 中国</option>
+                        <option value="US">🇺🇸 美国</option>
+                        <option value="JP">🇯🇵 日本</option>
+                        <option value="KR">🇰🇷 韩国</option>
+                        <option value="GB">🇬🇧 英国</option>
+                        <option value="FR">🇫🇷 法国</option>
+                        <option value="DE">🇩🇪 德国</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 前三名奖牌区 -->
+            <div class="podium" id="podium">
+                <!-- 动态生成 -->
+            </div>
+
+            <!-- 排行榜表格 -->
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th data-i18n="leaderboard.rank">排名</th>
+                        <th data-i18n="leaderboard.user">用户</th>
+                        <th data-i18n="leaderboard.country">国家/地区</th>
+                        <th data-i18n="leaderboard.score">积分</th>
+                        <th data-i18n="leaderboard.trend">趋势</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardBody">
+                    <!-- 动态生成 -->
+                </tbody>
+            </table>
+        </section>
+
+        <!-- CTA 区域 -->
+        <section class="cta-section">
+            <h2 class="cta-title" data-i18n="cta.title">🐱 想提升你的专注力排名吗？</h2>
+            <p class="cta-subtitle" data-i18n="cta.subtitle">加入专注喵 Premium，解锁更多强大功能</p>
+            <div class="cta-features">
+                <div class="cta-feature">✨ <span data-i18n="cta.feature1">解锁更多专注工具</span></div>
+                <div class="cta-feature">🏆 <span data-i18n="cta.feature2">获得额外积分加成</span></div>
+                <div class="cta-feature">🎁 <span data-i18n="cta.feature3">专属皮肤与头像框</span></div>
+            </div>
+            <button class="cta-btn" id="ctaPurchaseBtn" data-i18n="cta.button">立即购买 Premium</button>
+        </section>
+    </div>
+
+    <!-- 底部 -->
+    <footer>
+        <p>&copy; 2026 <span data-i18n="brandName">专注喵</span>. <span data-i18n="footer.rights">保留所有权利</span> | <span data-i18n="footer.madeWith">Made with</span> 💜 <span data-i18n="footer.byTeam">by Focus Cat Team</span></p>
+    </footer>
+
+    <script>
+        // 多语言配置
+        const i18n = {
+            'zh-CN': {
+                brandName: '专注喵',
+                nav: {
+                    home: '首页',
+                    leaderboard: '排行榜',
+                    myFocus: '我的专注',
+                    purchase: '🛒 购买专注喵'
+                },
+                stats: {
+                    globalUsers: '全球用户',
+                    todayFocus: '今日专注总时长',
+                    todayPoints: '今日积分产出',
+                    hours: '小时',
+                    todayNew: '今日新增',
+                    vsYesterday: '对比昨日'
+                },
+                leaderboard: {
+                    title: '🏆 全球排行榜',
+                    allTime: '全球总榜',
+                    today: '今日',
+                    thisWeek: '本周',
+                    thisMonth: '本月',
+                    allCountries: '🌍 全球',
+                    rank: '排名',
+                    user: '用户',
+                    country: '国家/地区',
+                    score: '积分',
+                    trend: '趋势'
+                },
+                cta: {
+                    title: '🐱 想提升你的专注力排名吗？',
+                    subtitle: '加入专注喵 Premium，解锁更多强大功能',
+                    feature1: '解锁更多专注工具',
+                    feature2: '获得额外积分加成',
+                    feature3: '专属皮肤与头像框',
+                    button: '立即购买 Premium'
+                },
+                footer: {
+                    rights: '保留所有权利',
+                    madeWith: 'Made with',
+                    byTeam: 'by Focus Cat Team'
+                }
+            },
+            'en-US': {
+                brandName: 'Focus Cat',
+                nav: {
+                    home: 'Home',
+                    leaderboard: 'Leaderboard',
+                    myFocus: 'My Focus',
+                    purchase: '🛒 Buy Focus Cat'
+                },
+                stats: {
+                    globalUsers: 'Global Users',
+                    todayFocus: 'Today\'s Total Focus Time',
+                    todayPoints: 'Today\'s Points Generated',
+                    hours: 'Hours',
+                    todayNew: 'New Today',
+                    vsYesterday: 'vs Yesterday'
+                },
+                leaderboard: {
+                    title: '🏆 Global Leaderboard',
+                    allTime: 'All Time',
+                    today: 'Today',
+                    thisWeek: 'This Week',
+                    thisMonth: 'This Month',
+                    allCountries: '🌍 Global',
+                    rank: 'Rank',
+                    user: 'User',
+                    country: 'Country',
+                    score: 'Score',
+                    trend: 'Trend'
+                },
+                cta: {
+                    title: '🐱 Want to boost your focus ranking?',
+                    subtitle: 'Join Focus Cat Premium to unlock powerful features',
+                    feature1: 'Unlock more focus tools',
+                    feature2: 'Extra points bonus',
+                    feature3: 'Exclusive skins & avatars',
+                    button: 'Get Premium Now'
+                },
+                footer: {
+                    rights: 'All rights reserved',
+                    madeWith: 'Made with',
+                    byTeam: 'by Focus Cat Team'
+                }
+            },
+            'ja-JP': {
+                brandName: 'フォーカスキャット',
+                nav: {
+                    home: 'ホーム',
+                    leaderboard: 'ランキング',
+                    myFocus: 'マイフォーカス',
+                    purchase: '🛒 購入'
+                },
+                stats: {
+                    globalUsers: 'グローバルユーザー',
+                    todayFocus: '今日の集中時間',
+                    todayPoints: '今日のポイント',
+                    hours: '時間',
+                    todayNew: '本日の新規',
+                    vsYesterday: '昨日比'
+                },
+                leaderboard: {
+                    title: '🏆 グローバルランキング',
+                    allTime: '総合',
+                    today: '今日',
+                    thisWeek: '今週',
+                    thisMonth: '今月',
+                    allCountries: '🌍 グローバル',
+                    rank: '順位',
+                    user: 'ユーザー',
+                    country: '国',
+                    score: 'スコア',
+                    trend: 'トレンド'
+                },
+                cta: {
+                    title: '🐱 ランキングを上げたいですか？',
+                    subtitle: 'Focus Cat Premiumで更に強力な機能を',
+                    feature1: 'より多くのツール',
+                    feature2: 'ボーナスポイント',
+                    feature3: '限定スキン',
+                    button: 'Premiumを購入'
+                },
+                footer: {
+                    rights: 'すべての権利を保有',
+                    madeWith: 'Made with',
+                    byTeam: 'by Focus Cat Team'
+                }
+            }
+        };
+
+        // 虚拟数据生成
+        const countries = {
+            'CN': { name: '中国', flag: '🇨🇳' },
+            'US': { name: '美国', flag: '🇺🇸' },
+            'JP': { name: '日本', flag: '🇯🇵' },
+            'KR': { name: '韩国', flag: '🇰🇷' },
+            'GB': { name: '英国', flag: '🇬🇧' },
+            'FR': { name: '法国', flag: '🇫🇷' },
+            'DE': { name: '德国', flag: '🇩🇪' },
+            'CA': { name: '加拿大', flag: '🇨🇦' },
+            'AU': { name: '澳大利亚', flag: '🇦🇺' }
+        };
+
+        const avatarStyles = ['😺', '😸', '😹', '😻', '😼', '😽', '🙀', '😿', '😾'];
+
+        const names = [
+            'FocusMaster', 'StudyHero', 'TimeKeeper', 'MindfulCat', 'ZenLion',
+            'FlowState', 'DeepWork', 'PomodoroKing', 'TaskNinja', 'GoalGetter',
+            'ConcentrationPro', 'ProductiveOwl', 'FocusWarrior', 'StudyBuddy', 'TimeMaster'
+        ];
+
+        function generateMockData(count = 50) {
+            const data = [];
+            const countryKeys = Object.keys(countries);
+
+            for (let i = 0; i < count; i++) {
+                const countryCode = countryKeys[Math.floor(Math.random() * countryKeys.length)];
+                const trendType = Math.random() > 0.5 ? 'up' : (Math.random() > 0.5 ? 'down' : 'neutral');
+                const trendValue = trendType === 'neutral' ? 0 : Math.floor(Math.random() * 10) + 1;
+
+                data.push({
+                    rank: i + 1,
+                    user: {
+                        id: `user_${i}`,
+                        name: names[Math.floor(Math.random() * names.length)] + Math.floor(Math.random() * 1000),
+                        avatar: avatarStyles[Math.floor(Math.random() * avatarStyles.length)]
+                    },
+                    countryCode: countryCode,
+                    score: Math.floor(Math.random() * 100000) + 10000,
+                    trend: {
+                        type: trendType,
+                        value: trendValue
+                    }
+                });
+            }
+
+            // 按积分排序
+            data.sort((a, b) => b.score - a.score);
+
+            // 更新排名
+            data.forEach((item, index) => {
+                item.rank = index + 1;
+            });
+
+            return data;
+        }
+
+        let leaderboardData = generateMockData(50);
+        let currentPeriod = 'all';
+        let currentCountry = 'all';
+
+        // 初始化统计数据
+        function initStats() {
+            animateNumber('totalUsers', 1234567, 2000);
+            animateNumber('newUsersToday', 1523, 2000);
+            animateNumber('totalFocusHours', 87654, 2000);
+            animateNumber('focusGrowth', 23, 2000);
+            animateNumber('totalPoints', 9876543, 2000);
+            animateNumber('pointsGrowth', 18, 2000);
+        }
+
+        // 数字滚动动画
+        function animateNumber(elementId, target, duration) {
+            const element = document.getElementById(elementId);
+            const start = 0;
+            const increment = target / (duration / 16);
+            let current = start;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    element.textContent = target.toLocaleString();
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current).toLocaleString();
+                }
+            }, 16);
+        }
+
+        // 渲染前三名
+        function renderPodium() {
+            const podium = document.getElementById('podium');
+            const top3 = leaderboardData.slice(0, 3);
+            const medals = ['🥇', '🥈', '🥉'];
+            const classes = ['podium-first', 'podium-second', 'podium-third'];
+            const avatars = ['women1.png', 'men1.png', 'women2.png'];
+
+            podium.innerHTML = top3.map((item, index) => `
+                <div class="podium-item ${classes[index]}">
+                    <div class="podium-card">
+                        <div class="medal">${medals[index]}</div>
+                        <div class="podium-avatar">
+                            <img src="${avatars[index]}" alt="${item.user.name}">
+                        </div>
+                        <div class="podium-name">${item.user.name}</div>
+                        <div class="podium-country">${countries[item.countryCode].flag}</div>
+                        <div class="podium-score">${item.score.toLocaleString()}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 渲染排行榜表格
+        function renderLeaderboard() {
+            const tbody = document.getElementById('leaderboardBody');
+            const data = leaderboardData.slice(3, 50); // 4-50名
+
+            tbody.innerHTML = data.map(item => {
+                const isTopTen = item.rank <= 10;
+                const trendIcon = item.trend.type === 'up' ? '↑' : (item.trend.type === 'down' ? '↓' : '→');
+                const trendClass = item.trend.type === 'up' ? 'trend-up' : (item.trend.type === 'down' ? 'trend-down' : '');
+
+                return `
+                    <tr class="${isTopTen ? 'top-ten' : ''}">
+                        <td class="rank-cell">${item.rank}</td>
+                        <td>
+                            <div class="user-cell">
+                                <div class="user-avatar">${item.user.avatar}</div>
+                                <div class="user-name">${item.user.name}</div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="country-cell">
+                                <span class="flag">${countries[item.countryCode].flag}</span>
+                                <span>${countries[item.countryCode].name}</span>
+                            </div>
+                        </td>
+                        <td class="score-cell">${item.score.toLocaleString()}</td>
+                        <td>
+                            <div class="trend-cell ${trendClass}">
+                                ${trendIcon} ${item.trend.value > 0 ? item.trend.value : ''}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // 筛选功能
+        function filterLeaderboard() {
+            let filteredData = generateMockData(50);
+
+            // 按国家筛选
+            if (currentCountry !== 'all') {
+                filteredData = filteredData.filter(item => item.countryCode === currentCountry);
+            }
+
+            // 按时间周期（这里简化处理，实际应该从后端获取不同时间段的数据）
+            if (currentPeriod !== 'all') {
+                // 模拟不同时间段的数据变化
+                filteredData = filteredData.map(item => ({
+                    ...item,
+                    score: Math.floor(item.score * (Math.random() * 0.5 + 0.5))
+                }));
+                filteredData.sort((a, b) => b.score - a.score);
+                filteredData.forEach((item, index) => {
+                    item.rank = index + 1;
+                });
+            }
+
+            leaderboardData = filteredData;
+            renderPodium();
+            renderLeaderboard();
+        }
+
+        // 多语言切换
+        function changeLanguage(lang) {
+            const translations = i18n[lang];
+
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.getAttribute('data-i18n');
+                const keys = key.split('.');
+                let value = translations;
+
+                for (const k of keys) {
+                    value = value[k];
+                }
+
+                if (value) {
+                    element.textContent = value;
+                }
+            });
+        }
+
+        // 购买跳转
+        function handlePurchase() {
+            // 跳转到商品详情页
+            window.location.href = 'product-detail.html';
+        }
+
+        // 事件监听
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化
+            initStats();
+            renderPodium();
+            renderLeaderboard();
+
+            // 时间周期筛选
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentPeriod = btn.getAttribute('data-period');
+                    filterLeaderboard();
+                });
+            });
+
+            // 国家筛选
+            document.getElementById('countryFilter').addEventListener('change', (e) => {
+                currentCountry = e.target.value;
+                filterLeaderboard();
+            });
+
+            // 语言切换
+            document.getElementById('langSwitcher').addEventListener('change', (e) => {
+                changeLanguage(e.target.value);
+            });
+
+            // 购买按钮
+            document.getElementById('headerPurchaseBtn').addEventListener('click', handlePurchase);
+            document.getElementById('ctaPurchaseBtn').addEventListener('click', handlePurchase);
+        });
+    </script>
+</body>
+</html>

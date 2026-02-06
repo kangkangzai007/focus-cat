@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>专注喵 - 学生党自律外挂 | 智能专注硬件</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --primary-blue: #667eea;
+            --primary-purple: #764ba2;
+            --gold: #ffd700;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f7fafc;
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --border-color: #e2e8f0;
+            --success-green: #48bb78;
+        }
+
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif;
+            background: linear-gradient(180deg, #f0f4ff 0%, #fef5ff 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* 头部导航 */
+        header {
+            position: sticky;
+            top: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo img {
+            height: 50px;
+            width: auto;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .back-btn {
+            padding: 0.75rem 1.5rem;
+            background: white;
+            color: var(--primary-blue);
+            border: 2px solid var(--primary-blue);
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-btn:hover {
+            background: var(--primary-blue);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* 主容器 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* 产品展示区 */
+        .product-hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .product-image {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            background: white;
+            padding: 2rem;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 10px;
+        }
+
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .product-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            width: fit-content;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .product-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .product-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+        }
+
+        .price-section {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+        }
+
+        .price-label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #d32f2f;
+        }
+
+        .price-currency {
+            font-size: 2rem;
+        }
+
+        .purchase-btn {
+            width: 100%;
+            padding: 1.25rem 2rem;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            margin-bottom: 1rem;
+        }
+
+        .purchase-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
+        }
+
+        /* 功能特点 */
+        .features-section {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 3rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--bg-secondary);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .feature-desc {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* 适合人群 */
+        .audience-section {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 3rem;
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        .audience-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .audience-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            transition: all 0.3s;
+        }
+
+        .audience-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .audience-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .audience-text {
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            line-height: 1.8;
+        }
+
+        /* CTA区域 */
+        .cta-section {
+            background: var(--primary-gradient);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 1.4s ease-out;
+        }
+
+        .cta-section::before {
+            content: '🐾';
+            position: absolute;
+            font-size: 200px;
+            opacity: 0.1;
+            top: -50px;
+            right: -50px;
+            transform: rotate(-15deg);
+        }
+
+        .cta-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-text {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-btn {
+            padding: 1.25rem 3rem;
+            background: white;
+            color: var(--primary-purple);
+            border: none;
+            border-radius: 30px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 底部 */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            background: white;
+            margin-top: 3rem;
+        }
+
+        /* 响应式 */
+        @media (max-width: 768px) {
+            .product-hero {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .product-title {
+                font-size: 1.8rem;
+            }
+
+            .product-subtitle {
+                font-size: 1rem;
+            }
+
+            .price {
+                font-size: 2.5rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部导航 -->
+    <header>
+        <div class="header-container">
+            <a href="focus-cat-leaderboard.html" class="logo">
+                <img src="logo.png" alt="专注喵Logo">
+                <span class="logo-text">专注喵</span>
+            </a>
+            <a href="focus-cat-leaderboard.html" class="back-btn">← 返回首页</a>
+        </div>
+    </header>
+
+    <!-- 主容器 -->
+    <div class="container">
+        <!-- 产品展示区 -->
+        <section class="product-hero">
+            <div class="product-image">
+                <img src="xingqing1.png" alt="专注喵智能硬件">
+            </div>
+            <div class="product-info">
+                <span class="product-badge">🔥 新品首发</span>
+                <h1 class="product-title">【学生党自律外挂】专注喵智能硬件</h1>
+                <p class="product-subtitle">告别手机干扰，拯救拖延症，让学习像打怪升级一样有趣！<br>这不仅是一个硬件，更是你的高效学习搭子。</p>
+
+                <div class="price-section">
+                    <div class="price-label">🔥 新品首发价</div>
+                    <div class="price"><span class="price-currency">¥</span>200</div>
+                </div>
+
+                <button class="purchase-btn" onclick="handlePurchase()">🛒 立即购买专注喵</button>
+                <p style="text-align: center; color: var(--text-secondary); font-size: 0.9rem;">
+                    ✓ 顺丰包邮 ✓ 7天无理由退货 ✓ 1年质保
+                </p>
+            </div>
+        </section>
+
+        <!-- 产品特点 -->
+        <section class="features-section">
+            <h2 class="section-title">✨ 为什么选择专注喵？</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3 class="feature-title">智能硬件锁机</h3>
+                    <p class="feature-desc">实体硬件控制，比单纯的手机软件更有效。启动专注模式后，手机立即进入深度锁定状态。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎮</div>
+                    <h3 class="feature-title">游戏化学习体验</h3>
+                    <p class="feature-desc">学习像打怪升级一样有趣！每次专注都能获得经验值和奖励，让自律变得有趣。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">数据可视化分析</h3>
+                    <p class="feature-desc">详细记录你的专注时长、效率曲线、进步轨迹，让每一分钟都可量化。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏆</div>
+                    <h3 class="feature-title">全球排行榜</h3>
+                    <p class="feature-desc">与全球学霸 PK 专注力，登上排行榜，成为专注之王！</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⏰</div>
+                    <h3 class="feature-title">番茄钟专注法</h3>
+                    <p class="feature-desc">科学的时间管理方法，25分钟专注+5分钟休息，提升学习效率。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💎</div>
+                    <h3 class="feature-title">积分奖励系统</h3>
+                    <p class="feature-desc">专注即可获得积分，兑换精美礼品，让努力看得见、摸得着。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 适合人群 -->
+        <section class="audience-section">
+            <h2 class="section-title">🎯 适合人群</h2>
+            <div class="audience-list">
+                <div class="audience-item">
+                    <div class="audience-icon">📚</div>
+                    <p class="audience-text">写作业容易走神，需要外力辅助的中小学生。</p>
+                </div>
+                <div class="audience-item">
+                    <div class="audience-icon">⏱️</div>
+                    <p class="audience-text">想利用碎片化时间学习，但总无意识拿起手机的同学。</p>
+                </div>
+                <div class="audience-item">
+                    <div class="audience-icon">🎓</div>
+                    <p class="audience-text">面临重要考试（中考、高考），需要进行长时间复习的考生。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA区域 -->
+        <section class="cta-section">
+            <h2 class="cta-title">给自己一个机会</h2>
+            <p class="cta-text">用 ¥200 换取一个高效自律的未来<br>现在下单，成为第一批"专注喵"体验官<br>开启你的学霸进化之路！</p>
+            <button class="cta-btn" onclick="handlePurchase()">🚀 立即抢购</button>
+        </section>
+    </div>
+
+    <!-- 底部 -->
+    <footer>
+        <p>&copy; 2026 专注喵. 保留所有权利 | Made with 💜 by Focus Cat Team</p>
+    </footer>
+
+    <script>
+        function handlePurchase() {
+            // 这里配置实际的购买链接
+            alert('感谢您的关注！\n\n商品即将上架，请添加客服微信获取首发优惠：\n微信号：hthx_2014 \n\n或关注我们的公众号"专注喵"了解更多信息。');
+            // 实际使用时可以替换为：
+            // window.location.href = 'https://your-shop-url.com/checkout';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+# Editor directories and files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.code-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Python
+*.py
+__pycache__/
