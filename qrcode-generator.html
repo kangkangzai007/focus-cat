@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>专注喵二维码生成器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .url-display {
+            background: #f7fafc;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            word-break: break-all;
+            font-family: monospace;
+            color: #2d3748;
+        }
+
+        .qrcode-box {
+            background: #f7fafc;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        .qrcode-box img {
+            max-width: 300px;
+            width: 100%;
+            height: auto;
+            border: 3px solid white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: 600;
+            margin: 0.5rem;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .tips {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #fff5e6;
+            border-left: 4px solid #ffa500;
+            border-radius: 8px;
+            text-align: left;
+            color: #2d3748;
+            line-height: 1.8;
+        }
+
+        .tips strong {
+            color: #667eea;
+        }
+
+        .online-services {
+            margin-top: 2rem;
+            text-align: left;
+        }
+
+        .online-services h3 {
+            margin-bottom: 1rem;
+            color: #2d3748;
+        }
+
+        .service-link {
+            display: block;
+            padding: 0.75rem 1rem;
+            background: #f7fafc;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            text-decoration: none;
+            color: #667eea;
+            transition: all 0.3s;
+        }
+
+        .service-link:hover {
+            background: #e6f2ff;
+            transform: translateX(5px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐱 专注喵二维码生成器</h1>
+
+        <p style="color: #718096; margin-bottom: 1rem;">商品详情页地址：</p>
+        <div class="url-display">
+            https://kangkangzai007.github.io/focus-cat/product-detail.html
+        </div>
+
+        <div class="qrcode-box">
+            <img id="qrcode" src="" alt="二维码">
+            <p style="margin-top: 1rem; color: #718096;">扫描二维码查看商品详情</p>
+        </div>
+
+        <a href="" id="downloadBtn" class="download-btn" download="focus-cat-qrcode.png">
+            📥 下载二维码（PNG格式）
+        </a>
+        <a href="" id="downloadBtnSvg" class="download-btn" download="focus-cat-qrcode.svg">
+            📥 下载二维码（SVG格式）
+        </a>
+
+        <div class="tips">
+            <strong>💡 使用提示：</strong><br>
+            1. 点击下载按钮保存二维码图片<br>
+            2. 可用于海报、传单、名片等线下推广<br>
+            3. PNG格式适合打印，SVG格式可无损放大<br>
+            4. 建议打印尺寸：3cm x 3cm 或更大
+        </div>
+
+        <div class="online-services">
+            <h3>🌐 更多二维码生成选项：</h3>
+            <a href="https://cli.im/" target="_blank" class="service-link">
+                草料二维码 - 支持美化、添加Logo
+            </a>
+            <a href="https://www.wwei.cn/" target="_blank" class="service-link">
+                微微二维码 - 简单快速生成
+            </a>
+            <a href="https://qr.ioi.tw/" target="_blank" class="service-link">
+                免费二维码生成器 - 多种样式
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const url = 'https://kangkangzai007.github.io/focus-cat/product-detail.html';
+        const encodedUrl = encodeURIComponent(url);
+
+        // 生成不同尺寸的二维码
+        const qrcodePng = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${encodedUrl}`;
+        const qrcodeSvg = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&format=svg&data=${encodedUrl}`;
+
+        // 显示二维码
+        document.getElementById('qrcode').src = qrcodePng;
+
+        // 设置下载链接
+        document.getElementById('downloadBtn').href = qrcodePng;
+        document.getElementById('downloadBtnSvg').href = qrcodeSvg;
+
+        // 添加右键保存提示
+        document.getElementById('qrcode').addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            alert('提示：请点击下方"下载二维码"按钮来保存图片');
+        });
+    </script>
+</body>
+</html>
