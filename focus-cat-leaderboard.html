@@ -1034,12 +1034,29 @@
 
         // 初始化统计数据
         function initStats() {
-            animateNumber('totalUsers', 1234567, 2000);
-            animateNumber('newUsersToday', 1523, 2000);
-            animateNumber('totalFocusHours', 87654, 2000);
-            animateNumber('focusGrowth', 23, 2000);
-            animateNumber('totalPoints', 9876543, 2000);
-            animateNumber('pointsGrowth', 18, 2000);
+            // 生成更真实的随机数据
+            // 全球用户数：280万 - 320万之间随机
+            const totalUsers = Math.floor(2800000 + Math.random() * 400000);
+            // 今日新增用户：全球用户的 0.15% - 0.25% 之间
+            const newUsersToday = Math.floor(totalUsers * (0.0015 + Math.random() * 0.001));
+
+            // 今日专注总时长：12万 - 18万小时之间随机
+            const totalFocusHours = Math.floor(120000 + Math.random() * 60000);
+            // 对比昨日增长：12% - 28% 之间随机
+            const focusGrowth = Math.floor(12 + Math.random() * 16);
+
+            // 今日积分产出：基于专注时长，每小时产生 80-120 积分
+            const pointsPerHour = 80 + Math.random() * 40;
+            const totalPoints = Math.floor(totalFocusHours * pointsPerHour);
+            // 积分增长：与专注时长增长相关，略有浮动
+            const pointsGrowth = Math.floor(focusGrowth * (0.8 + Math.random() * 0.4));
+
+            animateNumber('totalUsers', totalUsers, 2000);
+            animateNumber('newUsersToday', newUsersToday, 2000);
+            animateNumber('totalFocusHours', totalFocusHours, 2000);
+            animateNumber('focusGrowth', focusGrowth, 2000);
+            animateNumber('totalPoints', totalPoints, 2000);
+            animateNumber('pointsGrowth', pointsGrowth, 2000);
         }
 
         // 数字滚动动画
